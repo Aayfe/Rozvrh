@@ -1,5 +1,7 @@
 package cz.uhk.timetable.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Date;
@@ -7,12 +9,17 @@ import java.util.Date;
 
 // POJO Rozvrhové aktivity
 public class Activity {
-
+    @SerializedName("predmet")
     private String code;
+    @SerializedName("nazev")
     private String name;
+    @SerializedName("den")
     private String day;
+    @SerializedName("hodinaSkutOd")
     private LocalTime startTime;
+    @SerializedName("hodinaSkutDo")
     private LocalTime endTime;
+    @SerializedName("vsichniUciteleJmenaTituly")
     private String teacher;
 
     public Activity() {

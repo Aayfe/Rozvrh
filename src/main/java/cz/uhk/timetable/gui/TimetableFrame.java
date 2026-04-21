@@ -8,6 +8,10 @@ import cz.uhk.timetable.utils.impl.StagTimetableProvider;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TimetableFrame extends JFrame {
         private LocationTimetable timetable;
@@ -15,20 +19,21 @@ public class TimetableFrame extends JFrame {
         private JTable tabTimetable;
         private JPanel panTimetable;
 
+        private String[] building = new String[]{"J", "A", "S"};
+        private String[] room = new String[]{"J1", "J2", "J3"};
+
         public TimetableFrame(){
             super("FIM Rozvrhy");
             setDefaultCloseOperation(EXIT_ON_CLOSE);
             initGui();
         }
         private void initGui(){
-            timetable = provider.read("J", "22");
-            tabTimetable = new JTable(new TimetableModel());
+            timetable = new LocationTimetable();
 
+            panTimetable = new JPanel();
 
-           /* panTimetable = new JPanel();
-
-            JComboBox<String> comboBuilding = new JComboBox<>();
-            JComboBox<String> comboRoom = new JComboBox<>();
+            JComboBox<String> comboBuilding = new JComboBox<>(building);
+            JComboBox<String> comboRoom = new JComboBox<>(room);
             JButton btnSubmit = new JButton("Hledat");
 
             panTimetable.add(new JLabel("Budova"));
@@ -39,12 +44,19 @@ public class TimetableFrame extends JFrame {
 
             add(panTimetable, BorderLayout.NORTH);
 
-*/
-
+            TimetableModel model = new TimetableModel();
+            tabTimetable = new JTable(model);
+            tabTimetable.setAutoCreateRowSorter(true);
             add(new JScrollPane(tabTimetable), BorderLayout.CENTER);
 
 
-
+            btnSubmit.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    timetable = provider.read(comboBuilding.getSelectedItem().toString(), comboRoom.getSelectedItem().toString());
+                    model.fireTableDataChanged();
+                }
+            });
 
             pack();
         }
